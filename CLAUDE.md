@@ -1,47 +1,24 @@
-# 100の思考実験 読書ログ — Claude向け作業メモ
+# Claude向け引き継ぎメモ
+## 100の思考実験 読書ログシステム
 
-## このプロジェクトの概要
-Julian Baggini「100の思考実験」の読書ログシステム。
-ユーザーが「N番読んだ、こう思った」と話しかけてきたら、ログを書き込む。
+### このディレクトリの目的
+ユーザーがJulian Baggini「100の思考実験」を読んで考えたことを記録するシステム。
+Claudeがログファイルを書き、GitHubに自動pushする。
 
-## セットアップ済みの状態（再確認不要）
+### セットアップ状態（変更不要）
 - GitHub: https://github.com/kobayashi-ami/100-thought-experiments-log
-- gh CLI: インストール済み、kobayashi-ami アカウントで認証済み
-- git: user.name="kobayashi-ami", email="kobayashi-ami@users.noreply.github.com"
-- 自動push: ~/.claude/settings.json に PostToolUse フック設定済み
-  - Write/Edit 後に autopush.sh が走り、このディレクトリの変更を自動 git push
+- gh CLI: kobayashi-ami アカウントで認証済み
+- 自動push: ~/.claude/settings.json の PostToolUse フック → autopush.sh
 
-## ファイル構成
-- `progress.md` — 全100実験の進捗テーブル（読んだ実験は `[ ]` → `[x]` に更新）
-- `logs/NNN_タイトル.md` — 各実験のログ（NNNは3桁ゼロ埋め）
-- `TEMPLATE.md` — ログのフロントマター形式
-- `log.sh <番号> [タイトル]` — ログファイル作成スクリプト
-- `stats.sh` — プログレスバー付き進捗表示
-- `autopush.sh` — Claude Code フック用自動pushスクリプト
+### ユーザーが「思考実験X番読んだ」と言ったときの作業手順
+1. logs/NNN.md を確認（既存なら追記、なければ新規作成）
+2. TEMPLATE.md の形式で書く
+3. progress.md の該当行を [ ] → [x] に更新し、読了日を記入
+4. 保存 → autopush.sh が自動 git push する
 
-## ログを書くときのルール
-1. `logs/NNN_タイトル.md` を Write ツールで作成（NNNは3桁）
-2. `progress.md` の該当行を `[ ]` → `[x]` に Edit ツールで更新
-3. フックが自動でgit add/commit/pushする（手動操作不要）
+### ログファイルの命名規則
+logs/NNN.md（例: logs/001.md, logs/042.md）
 
-## ログのフォーマット（TEMPLATE.mdより）
-```
----
-number: NNN
-title: タイトル
-date: YYYY-MM-DD
-status: 読了
-tags: []
----
-
-## 思考実験の概要
-
-## 問いの核心
-
-## 自分の考え
-
-## 疑問・反論
-
-## 評価
-★★★☆☆
-```
+### 注意
+- autopush.sh が動かない場合は手動: cd ~/reading/100-thought-experiments && git add -A && git commit -m "更新" && git push
+- progress.md 最終行の進捗カウントも更新する
